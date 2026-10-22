@@ -1,0 +1,17 @@
+{
+  "name": "director-kit",
+  "owner": {
+    "name": "Vladislav Popov",
+    "url": "https://github.com/devladpopov"
+  },
+  "metadata": {
+    "description": "director-kit: CHECKPOINT protocol, memory floors and a cross-project board for Claude Code."
+  },
+  "plugins": [
+    {
+      "name": "director-kit",
+      "source": "./",
+      "description": "CHECKPOINT protocol, memory floors and a cross-project audit for Claude Code."
+    }
+  ]
+}

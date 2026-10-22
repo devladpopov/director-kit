@@ -1,0 +1,10 @@
+{
+  "name": "director-kit",
+  "version": "0.1.0",
+  "description": "CHECKPOINT protocol, memory floors and a cross-project audit for Claude Code. Sessions resume where they stopped and never redo finished steps.",
+  "author": { "name": "Vladislav Popov", "url": "https://github.com/devladpopov" },
+  "homepage": "https://github.com/devladpopov/director-kit",
+  "repository": "https://github.com/devladpopov/director-kit",
+  "license": "MIT",
+  "keywords": ["checkpoint", "memory", "audit", "dashboard"]
+}

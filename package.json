@@ -1,0 +1,12 @@
+{
+  "name": "director-kit",
+  "version": "0.1.0",
+  "description": "One board over all your projects, plus the CHECKPOINT and memory protocol that keeps Claude Code sessions from redoing work.",
+  "type": "module",
+  "bin": { "director-kit": "bin/director-kit.mjs" },
+  "files": ["bin", "lib", "templates", "skills", "commands", "hooks", ".claude-plugin"],
+  "scripts": { "test": "node test/smoke.mjs" },
+  "engines": { "node": ">=18" },
+  "keywords": ["claude-code", "claude-code-plugin", "dashboard", "kanban", "projects", "ai-agents"],
+  "license": "MIT"
+}
