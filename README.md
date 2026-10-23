@@ -1,8 +1,10 @@
 # director-kit
 
-**One person, {PROJECTS} projects, {COMMITS} commits a month: the whole operating system is open.**
+**One person, 214 projects, 3,790 commits in 30 days: the whole operating system is open.**
 
-<!-- numbers are filled on release day from `director-kit board` on the author's machine, not typed by hand -->
+<sup>Counted by `director-kit board` on the author's machine on 23 Oct 2026; worktrees share history, so each commit is counted once. Run it on yours.</sup>
+
+<!-- refresh both numbers and the date from a live `director-kit board` on release day, never type them by hand -->
 
 director-kit is the core of how I run every project with Claude Code: one board over all of them, and a protocol that makes every session resume exactly where the last one stopped and never redo finished work.
 
@@ -22,7 +24,7 @@ Five minutes later you see a board of everything in your projects folder: what w
 | **Audit** | `director-kit audit`: markdown report. Waiting on you first, then stalled, then repos without a remote, unpushed or uncommitted work, memory indexes over their limit, stale backups. |
 | **CHECKPOINT protocol** | `CHECKPOINT.md` in each project: STATUS, TASK, LAST_ACTION, NEXT, DO_NOT_REDO, VERIFY_BEFORE_ACT. A SessionStart hook shows it to Claude before it acts. After compaction or a crash the session continues instead of starting over. |
 | **Memory floors** | Index under 6000 chars, topic files, archive. Never delete, move. Test memory before and after compressing it. |
-| **Backup watch** | List folders and a max age; the audit flags any backup that went stale. |
+| **Backup watch** | `director-kit backup add <folder>`: the audit flags any backup whose newest file is older than the limit (26 h by default). |
 | **Templates** | `SOUL.md` (how the assistant behaves, what needs your yes), `VISION.md` (goal, criteria, constraints), `MEMORY.md`, `CHECKPOINT.md`. |
 
 ## Install
@@ -70,6 +72,8 @@ director-kit audit            markdown audit, saved to ~/.director-kit/audits/
 director-kit checkpoint [dir] create CHECKPOINT.md from the template (never overwrites)
 director-kit doctor           check node, git, claude
 director-kit demo             board with sample data
+director-kit backup add <path> [--name=nas] [--max-age=26]   watch a backup folder
+director-kit backup list | rm <name>                          OK / STALE per folder
   --no-open  --json  --private (no absolute paths)  --root=<dir>
 ```
 

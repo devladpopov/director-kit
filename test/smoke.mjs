@@ -64,6 +64,24 @@ try {
   assert.match(cp, /created/);
   assert.match(run(['checkpoint', path.join(root, 'fresh')]), /exists, not touched/);
 
+  // Backup watch via CLI: fresh folder OK, old one STALE, rm removes it.
+  const fresh = path.join(tmp, 'bk-fresh');
+  const stale = path.join(tmp, 'bk-stale');
+  fs.mkdirSync(fresh); fs.writeFileSync(path.join(fresh, 'a.tar'), 'x');
+  fs.mkdirSync(stale); fs.writeFileSync(path.join(stale, 'b.tar'), 'x');
+  const old = new Date(Date.now() - 50 * 36e5);
+  fs.utimesSync(path.join(stale, 'b.tar'), old, old);
+  assert.match(run(['backup', 'add', fresh, '--name=nas']), /added: nas/);
+  assert.match(run(['backup', 'add', stale, '--max-age=24']), /added: bk-stale/);
+  assert.match(run(['backup', 'add', stale, '--max-age=72']), /updated: bk-stale/);
+  run(['backup', 'add', stale, '--max-age=24']);
+  const bl = run(['backup', 'list']);
+  assert.match(bl, /OK +nas/);
+  assert.match(bl, /STALE bk-stale: 50h old/);
+  assert.match(run(['audit', '--no-open']), /STALE \*\*bk-stale\*\*/);
+  assert.match(run(['backup', 'rm', 'nas']), /removed: nas/);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(home, 'config.json'), 'utf8')).backups.length, 1);
+
   run(['demo', '--no-open']);
   console.log('smoke: all checks passed');
 } finally {

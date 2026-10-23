@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { loadConfig, saveConfig, guessRoot, isDir, HOME, CONFIG_PATH } from '../lib/config.mjs';
 import { scanRoot } from '../lib/scan.mjs';
 import { buildBoard, writeBoard } from '../lib/board.mjs';
-import { renderAudit } from '../lib/audit.mjs';
+import { renderAudit, backupFindings } from '../lib/audit.mjs';
 import { checkpointTemplate } from '../lib/checkpoint.mjs';
 import { demoScan } from '../lib/demo.mjs';
 
@@ -16,7 +16,8 @@ const KIT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2);
 const flags = new Set(argv.filter((a) => a.startsWith('--')));
 const pos = argv.filter((a) => !a.startsWith('--'));
-const cmd = pos[0] && !isDir(pos[0]) ? pos.shift() : 'init';
+const COMMANDS = ['init', 'board', 'audit', 'checkpoint', 'doctor', 'demo', 'backup', 'help'];
+const cmd = pos[0] && (COMMANDS.includes(pos[0]) || !isDir(pos[0])) ? pos.shift() : 'init';
 
 const HELP = `director-kit: one board over all your projects
 
@@ -26,6 +27,8 @@ const HELP = `director-kit: one board over all your projects
   director-kit checkpoint [dir] create CHECKPOINT.md from template (does not overwrite)
   director-kit doctor           check node, git, claude
   director-kit demo             board with sample data (for screenshots)
+  director-kit backup add <path> [--name=photos] [--max-age=26]
+  director-kit backup list | rm <name|path>   folders the audit watches
 
   --no-open   do not open the browser      --json   print board json
   --private   no absolute paths in board   --root=<dir>  projects folder
@@ -40,8 +43,8 @@ function open(file) {
   try { spawn(c, a, { stdio: 'ignore', detached: true }).unref(); } catch {}
 }
 
-function build(cfg, scan) {
-  const board = buildBoard(scan || scanRoot(cfg.root, cfg), { privatePaths: flags.has('--private') });
+async function build(cfg, scan) {
+  const board = buildBoard(scan || await scanRoot(cfg.root, cfg), { privatePaths: flags.has('--private') });
   const out = writeBoard(board, HOME);
   if (flags.has('--json')) console.log(JSON.stringify(board, null, 2));
   const S = board.summary;
@@ -67,7 +70,7 @@ async function init() {
   cfg.root = root;
   const saved = saveConfig(cfg);
   console.log(`config: ${saved}`);
-  const { out, board } = build(cfg);
+  const { out, board } = await build(cfg);
   if (!board.summary.total) console.log(`no projects found in ${root}: a project is a subfolder with .git or CHECKPOINT.md`);
   open(out.html);
   if (has('claude')) {
@@ -79,10 +82,10 @@ async function init() {
 
 const cmds = {
   init,
-  board() { const cfg = needRoot(); open(build(cfg).out.html); },
-  audit() {
+  async board() { const cfg = needRoot(); open((await build(cfg)).out.html); },
+  async audit() {
     const cfg = needRoot();
-    const { board } = build(cfg);
+    const { board } = await build(cfg);
     const { markdown } = renderAudit(board, cfg);
     const dir = path.join(HOME, 'audits');
     fs.mkdirSync(dir, { recursive: true });
@@ -106,9 +109,39 @@ const cmds = {
     console.log(`config ${fs.existsSync(CONFIG_PATH) ? CONFIG_PATH + ' root=' + cfg.root : 'none yet: run director-kit'}`);
     console.log(`kit ${KIT}`);
   },
-  demo() { const cfg = loadConfig(); open(build(cfg, demoScan()).out.html); },
+  async demo() { const cfg = loadConfig(); open((await build(cfg, demoScan())).out.html); },
+  backup,
   help() { console.log(HELP); },
 };
+
+// Backup watch: the audit flags a folder whose newest file is older than maxAgeHours.
+function backup() {
+  const [sub = 'list', target] = pos;
+  const cfg = loadConfig();
+  const list = cfg.backups || [];
+  if (sub === 'add') {
+    if (!target) { console.error('usage: director-kit backup add <path> [--name=...] [--max-age=hours]'); process.exit(1); }
+    const p = path.resolve(target);
+    if (!fs.existsSync(p)) console.log(`note: ${p} does not exist yet, the audit will report it as STALE until it does`);
+    const maxAgeHours = Number(flagVal('max-age') || 26);
+    if (!(maxAgeHours > 0)) { console.error('--max-age must be a number of hours'); process.exit(1); }
+    const entry = { name: flagVal('name') || path.basename(p), path: p, maxAgeHours };
+    const i = list.findIndex((b) => path.resolve(b.path) === p);
+    if (i >= 0) list[i] = entry; else list.push(entry);
+    cfg.backups = list;
+    saveConfig(cfg);
+    console.log(`${i >= 0 ? 'updated' : 'added'}: ${entry.name} (${p}), limit ${maxAgeHours}h`);
+  } else if (sub === 'rm' || sub === 'remove') {
+    const keep = list.filter((b) => b.name !== target && path.resolve(b.path) !== path.resolve(target || ''));
+    if (!target || keep.length === list.length) { console.error(`no backup named or at: ${target}`); process.exit(1); }
+    cfg.backups = keep;
+    saveConfig(cfg);
+    console.log(`removed: ${target}`);
+  } else if (sub === 'list') {
+    if (!list.length) { console.log('no backups watched yet: director-kit backup add <path>'); return; }
+    for (const b of backupFindings(list)) console.log(`${b.ok ? 'OK   ' : 'STALE'} ${b.name}: ${b.ageHours == null ? 'nothing found' : b.ageHours + 'h old'} (limit ${b.maxAgeHours}h) ${b.path}`);
+  } else { console.error(`unknown: backup ${sub}`); process.exit(1); }
+}
 
 function needRoot() {
   const cfg = loadConfig();
