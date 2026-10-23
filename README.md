@@ -9,7 +9,7 @@
 director-kit is the core of how I run every project with Claude Code: one board over all of them, and a protocol that makes every session resume exactly where the last one stopped and never redo finished work.
 
 ```
-npx github:devladpopov/director-kit
+npx director-kit
 ```
 
 Five minutes later you see a board of everything in your projects folder: what waits on you, what is active, what stalled, what is not backed up. It works on day zero, from git history alone. Nothing leaves your machine.
@@ -32,8 +32,8 @@ Five minutes later you see a board of everything in your projects folder: what w
 Board and audit (Node 18+, git):
 
 ```
-npx github:devladpopov/director-kit            # asks for your projects folder, builds the board, opens it
-npx github:devladpopov/director-kit audit
+npx director-kit            # asks for your projects folder, builds the board, opens it
+npx director-kit audit
 ```
 
 Claude Code plugin (protocol, hook, `/director-kit:audit`, `/director-kit:board`, `/director-kit:checkpoint`):

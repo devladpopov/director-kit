@@ -8,5 +8,9 @@
   "scripts": { "test": "node test/smoke.mjs" },
   "engines": { "node": ">=18" },
   "keywords": ["claude-code", "claude-code-plugin", "dashboard", "kanban", "projects", "ai-agents"],
-  "license": "MIT"
+  "license": "MIT",
+  "author": "Vladislav Popov (https://github.com/devladpopov)",
+  "homepage": "https://github.com/devladpopov/director-kit",
+  "repository": { "type": "git", "url": "git+https://github.com/devladpopov/director-kit.git" },
+  "bugs": "https://github.com/devladpopov/director-kit/issues"
 }
