@@ -1,3 +1,4 @@
 node_modules/
 .director-kit/
 *.log
+docs/screencast/*.webm

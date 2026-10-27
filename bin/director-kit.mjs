@@ -26,7 +26,7 @@ const HELP = `director-kit: one board over all your projects
   director-kit audit            markdown audit: waiting on you, stalled, not backed up
   director-kit checkpoint [dir] create CHECKPOINT.md from template (does not overwrite)
   director-kit doctor           check node, git, claude
-  director-kit demo             board with sample data (for screenshots)
+  director-kit demo             board with sample data (~/.director-kit/demo/, for screenshots)
   director-kit backup add <path> [--name=photos] [--max-age=26]
   director-kit backup list | rm <name|path>   folders the audit watches
 
@@ -43,9 +43,9 @@ function open(file) {
   try { spawn(c, a, { stdio: 'ignore', detached: true }).unref(); } catch {}
 }
 
-async function build(cfg, scan) {
+async function build(cfg, scan, outDir = HOME) {
   const board = buildBoard(scan || await scanRoot(cfg.root, cfg), { privatePaths: flags.has('--private') });
-  const out = writeBoard(board, HOME);
+  const out = writeBoard(board, outDir);
   if (flags.has('--json')) console.log(JSON.stringify(board, null, 2));
   const S = board.summary;
   console.log(`${S.total} projects, ${S.commits30d} commits in 30 days | waiting on you ${S.waiting}, active ${S.active}, stalled ${S.stalled}, done ${S.done}, dormant ${S.dormant}, at risk ${S.atRisk}`);
@@ -109,7 +109,8 @@ const cmds = {
     console.log(`config ${fs.existsSync(CONFIG_PATH) ? CONFIG_PATH + ' root=' + cfg.root : 'none yet: run director-kit'}`);
     console.log(`kit ${KIT}`);
   },
-  async demo() { const cfg = loadConfig(); open((await build(cfg, demoScan())).out.html); },
+  // Separate folder: the demo must never overwrite the real board.
+  async demo() { const cfg = loadConfig(); open((await build(cfg, demoScan(), path.join(HOME, 'demo'))).out.html); },
   backup,
   help() { console.log(HELP); },
 };

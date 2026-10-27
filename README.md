@@ -14,7 +14,9 @@ npx director-kit
 
 Five minutes later you see a board of everything in your projects folder: what waits on you, what is active, what stalled, what is not backed up. It works on day zero, from git history alone. Nothing leaves your machine.
 
-![board](docs/board.png)
+![director-kit in 70 seconds](docs/screencast/director-kit.gif)
+
+70-second walkthrough on sample data ([mp4](docs/screencast/director-kit.mp4)). Still screenshot: [docs/board.png](docs/board.png).
 
 ## What is inside
 
