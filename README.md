@@ -1,8 +1,8 @@
 # director-kit
 
-**One person, 214 projects, 3,790 commits in 30 days: the whole operating system is open.**
+**One person, 274 projects, 2,478 commits in 30 days: the whole operating system is open.**
 
-<sup>Counted by `director-kit board` on the author's machine on 23 Oct 2026; worktrees share history, so each commit is counted once. Run it on yours.</sup>
+<sup>Counted by `director-kit board` on the author's machine on 31 Oct 2026; worktrees share history, so each commit is counted once. Run it on yours.</sup>
 
 <!-- refresh both numbers and the date from a live `director-kit board` on release day, never type them by hand -->
 
@@ -85,6 +85,6 @@ The board is a local file. No telemetry, no network calls, no dependencies. `--p
 
 ## Want it set up for you?
 
-The full system also runs every project from Telegram topics with Claude, auto-resume and a director that audits all topics every 8 hours. That part is a done-for-you install: {INSTALL_LINK}.
+The full system also runs every project from Telegram topics with Claude, auto-resume and a director that audits all topics every 8 hours. That part is a done-for-you install: https://shtab.vladislavpopov.ru.
 
 MIT
