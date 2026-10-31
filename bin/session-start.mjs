@@ -15,7 +15,7 @@ if (!cp) {
 const f = cp.fields;
 const st = statusOf(f.STATUS);
 const L = [`[director-kit] CHECKPOINT.md (${path.basename(dir)}), read before acting:`];
-for (const k of ['STATUS', 'TASK', 'DATE', 'LAST_ACTION', 'NEXT', 'BLOCKER', 'VERIFY_BEFORE_ACT']) if (f[k]) L.push(`${k}: ${f[k]}`);
+for (const k of ['STATUS', 'TASK', 'DATE', 'LAST_ACTION', 'NEXT', 'BLOCKER', 'WAIT_FOR', 'NOT_BEFORE', 'VERIFY_BEFORE_ACT']) if (f[k]) L.push(`${k}: ${f[k]}`);
 if (cp.lists.DO_NOT_REDO?.length) L.push('DO_NOT_REDO:', ...cp.lists.DO_NOT_REDO.map((x) => `- ${x}`));
 if (st === 'done') L.push('The task above is COMPLETED. Do not repeat it; wait for a new instruction.');
 else L.push('Continue from NEXT. Before any deploy, migration or delete, run VERIFY_BEFORE_ACT; skip steps that are already done.');

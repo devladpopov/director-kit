@@ -16,7 +16,7 @@ const KIT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2);
 const flags = new Set(argv.filter((a) => a.startsWith('--')));
 const pos = argv.filter((a) => !a.startsWith('--'));
-const COMMANDS = ['init', 'board', 'audit', 'checkpoint', 'doctor', 'demo', 'backup', 'help'];
+const COMMANDS = ['init', 'board', 'audit', 'checkpoint', 'doctor', 'demo', 'backup', 'help', 'version'];
 const cmd = pos[0] && (COMMANDS.includes(pos[0]) || !isDir(pos[0])) ? pos.shift() : 'init';
 
 const HELP = `director-kit: one board over all your projects
@@ -29,11 +29,13 @@ const HELP = `director-kit: one board over all your projects
   director-kit demo             board with sample data (~/.director-kit/demo/, for screenshots)
   director-kit backup add <path> [--name=photos] [--max-age=26]
   director-kit backup list | rm <name|path>   folders the audit watches
+  director-kit version          print the version
 
   --no-open   do not open the browser      --json   print board json
   --private   no absolute paths in board   --root=<dir>  projects folder
 `;
 
+const VERSION = JSON.parse(fs.readFileSync(path.join(KIT, 'package.json'), 'utf8')).version;
 const has = (bin) => { try { execFileSync(bin, ['--version'], { stdio: 'ignore', timeout: 10000, shell: process.platform === 'win32' }); return true; } catch { return false; } };
 const flagVal = (k) => { const a = argv.find((x) => x.startsWith(`--${k}=`)); return a ? a.split('=').slice(1).join('=') : null; };
 
@@ -107,12 +109,13 @@ const cmds = {
     console.log(`claude ${has('claude') ? 'OK' : 'not found (optional: the board works without it)'}`);
     const cfg = loadConfig();
     console.log(`config ${fs.existsSync(CONFIG_PATH) ? CONFIG_PATH + ' root=' + cfg.root : 'none yet: run director-kit'}`);
-    console.log(`kit ${KIT}`);
+    console.log(`kit ${KIT} (${VERSION})`);
   },
   // Separate folder: the demo must never overwrite the real board.
   async demo() { const cfg = loadConfig(); open((await build(cfg, demoScan(), path.join(HOME, 'demo'))).out.html); },
   backup,
   help() { console.log(HELP); },
+  version() { console.log(VERSION); },
 };
 
 // Backup watch: the audit flags a folder whose newest file is older than maxAgeHours.
@@ -152,5 +155,6 @@ function needRoot() {
 }
 
 if (flags.has('--help') || cmd === '-h') cmds.help();
+else if (flags.has('--version') || cmd === '-v') cmds.version();
 else if (!cmds[cmd]) { console.error(`unknown command: ${cmd}\n`); cmds.help(); process.exit(1); }
 else await cmds[cmd]();

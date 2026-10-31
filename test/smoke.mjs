@@ -42,6 +42,7 @@ try {
   repo('local-only', { commits: 2 });
   fs.mkdirSync(path.join(root, 'just-a-folder'));
 
+  assert.match(run(['--version']), /^\d+\.\d+\.\d+\s*$/);
   const out = run([`--root=${root}`, '--no-open', '--yes']);
   assert.match(out, /6 projects, 8 commits in 30 days/);
   const board = JSON.parse(fs.readFileSync(path.join(home, 'board.json'), 'utf8'));
