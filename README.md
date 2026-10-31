@@ -1,5 +1,7 @@
 # director-kit
 
+[Русская версия](README.ru.md)
+
 **One person, 274 projects, 2,478 commits in 30 days: the whole operating system is open.**
 
 <sup>Counted by `director-kit board` on the author's machine on 31 Oct 2026; worktrees share history, so each commit is counted once. Run it on yours.</sup>
@@ -45,11 +47,13 @@ claude plugin marketplace add devladpopov/director-kit
 claude plugin install director-kit@director-kit
 ```
 
+Windows, macOS, Linux and WSL step by step, a daily audit on a schedule, uninstall and troubleshooting: [docs/INSTALL.md](docs/INSTALL.md). Ready-made checkpoints for every column, a config and a CLAUDE.md that makes Claude follow the protocol: [examples/](examples/).
+
 ## How status is decided
 
 A project is any subfolder with `.git` or `CHECKPOINT.md`.
 
-- With a CHECKPOINT: `STATUS` decides. `NEXT: await user input` puts it in **waiting on you**. In progress but silent longer than 7 days: **stalled**.
+- With a CHECKPOINT: `STATUS` decides. `NEXT: await user input` or `BLOCKER: you: ...` puts it in **waiting on you**. `NOT_BEFORE` in the future: **paused** until then. In progress but silent longer than 7 days: **stalled**. `WAIT_FOR` shows on the card who or what the work waits on.
 - Without one: commits or edits in the last 7 days: **active**; 7 to 30 days: **stalled**; older: **dormant**.
 - Worktrees share history, so a commit is counted once.
 
@@ -73,6 +77,7 @@ director-kit board            rebuild the board
 director-kit audit            markdown audit, saved to ~/.director-kit/audits/
 director-kit checkpoint [dir] create CHECKPOINT.md from the template (never overwrites)
 director-kit doctor           check node, git, claude
+director-kit version          print the version
 director-kit demo             board with sample data (~/.director-kit/demo/, for screenshots)
 director-kit backup add <path> [--name=nas] [--max-age=26]   watch a backup folder
 director-kit backup list | rm <name>                          OK / STALE per folder
