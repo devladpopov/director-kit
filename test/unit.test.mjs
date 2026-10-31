@@ -156,3 +156,9 @@ test('backups: newest file decides, missing folder is stale', () => {
     assert.equal(gone.maxAgeHours, 26);
   } finally { fs.rmSync(d, { recursive: true, force: true }); }
 });
+
+test('examples/checkpoints land in the columns examples/README.md promises', async () => {
+  const dir = new URL('../examples/checkpoints/', import.meta.url);
+  const want = { 'active.md': 'active', 'waiting-on-you.md': 'waiting', 'scheduled.md': 'paused', 'waiting-for-someone.md': 'active', 'done.md': 'done' };
+  for (const [f, status] of Object.entries(want)) assert.equal((await scan(fs.readFileSync(new URL(f, dir), 'utf8'))).status, status, f);
+});

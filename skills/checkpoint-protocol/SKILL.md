@@ -21,7 +21,11 @@ DO_NOT_REDO:
 VERIFY_BEFORE_ACT: <commands that check real state: git log -1, curl /health, list migrations>
 ```
 
-Optional: `PROGRESS: 40%`, `GOAL:`, `METRIC: name | target | fact`.
+Optional:
+
+- `NOT_BEFORE: 2026-11-05T08:30Z`: the next step is scheduled; until then the board shows the project as paused, not stalled.
+- `WAIT_FOR: <topic, person or event>`: what the work is waiting on when it is not the user.
+- `PROGRESS: 40%`, `GOAL:`, `METRIC: name | target | fact`.
 
 ## Rules
 
@@ -29,7 +33,7 @@ Optional: `PROGRESS: 40%`, `GOAL:`, `METRIC: name | target | fact`.
 2. **Verify before acting.** Before any deploy, migration, payment, message or delete, run `VERIFY_BEFORE_ACT` and compare with `DO_NOT_REDO`. If the goal is already reached, log "already done" and skip.
 3. **Never duplicate a successful side effect** (sent email, posted message, charged card) without a new explicit reason.
 4. **Rewrite on milestones.** After each significant step, rewrite the file: new LAST_ACTION, new NEXT, append to DO_NOT_REDO. Rewrite, do not append history: history belongs in git or an archive file.
-5. **Waiting is a status.** When the next step needs the user, set `STATUS: AWAITING_USER`, `NEXT: await user input` and say exactly what is needed in BLOCKER. The board puts it in "Waiting on you".
+5. **Waiting is a status.** When the next step needs the user, set `STATUS: AWAITING_USER`, `NEXT: await user input` and say exactly what is needed in `BLOCKER: you: ...`. The board puts it in "Waiting on you" (either signal is enough).
 6. **No secrets.** Never write tokens, passwords or personal data into CHECKPOINT.md. Point to where they live instead.
 
 ## Creating one

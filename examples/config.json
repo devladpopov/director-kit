@@ -1,0 +1,12 @@
+{
+  "root": "/home/me/Projects",
+  "activeDays": 7,
+  "dormantDays": 30,
+  "memoryIndexLimit": 6000,
+  "skip": ["node_modules", ".git", ".cache", "tmp", "archive", "forks"],
+  "backups": [
+    { "name": "photos to NAS", "path": "/mnt/nas/photos", "maxAgeHours": 26 },
+    { "name": "db dumps", "path": "/var/backups/postgres", "maxAgeHours": 26 },
+    { "name": "weekly laptop image", "path": "/mnt/usb/images", "maxAgeHours": 170 }
+  ]
+}
