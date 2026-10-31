@@ -73,7 +73,7 @@ director-kit board            rebuild the board
 director-kit audit            markdown audit, saved to ~/.director-kit/audits/
 director-kit checkpoint [dir] create CHECKPOINT.md from the template (never overwrites)
 director-kit doctor           check node, git, claude
-director-kit demo             board with sample data
+director-kit demo             board with sample data (~/.director-kit/demo/, for screenshots)
 director-kit backup add <path> [--name=nas] [--max-age=26]   watch a backup folder
 director-kit backup list | rm <name>                          OK / STALE per folder
   --no-open  --json  --private (no absolute paths)  --root=<dir>

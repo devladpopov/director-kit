@@ -82,7 +82,12 @@ try {
   assert.match(run(['backup', 'rm', 'nas']), /removed: nas/);
   assert.equal(JSON.parse(fs.readFileSync(path.join(home, 'config.json'), 'utf8')).backups.length, 1);
 
-  run(['demo', '--no-open']);
+  // Demo goes to its own folder and must leave the real board untouched (bug in 0.2.0).
+  const realBoard = fs.readFileSync(path.join(home, 'board.json'), 'utf8');
+  assert.match(run(['demo', '--no-open']), /projects, \d+ commits in 30 days/);
+  assert.equal(fs.readFileSync(path.join(home, 'board.json'), 'utf8'), realBoard);
+  assert.match(JSON.parse(fs.readFileSync(path.join(home, 'demo', 'board.json'), 'utf8')).root, /\(demo\)/);
+  assert.ok(fs.existsSync(path.join(home, 'demo', 'board.html')));
   console.log('smoke: all checks passed');
 } finally {
   fs.rmSync(tmp, { recursive: true, force: true });
