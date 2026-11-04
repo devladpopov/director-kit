@@ -47,6 +47,8 @@ claude plugin marketplace add devladpopov/director-kit
 claude plugin install director-kit@director-kit
 ```
 
+Six-step video guide from install to the daily audit, every frame is real output: [docs/GUIDE.md](docs/GUIDE.md).
+
 Windows, macOS, Linux and WSL step by step, a daily audit on a schedule, uninstall and troubleshooting: [docs/INSTALL.md](docs/INSTALL.md). Ready-made checkpoints for every column, a config and a CLAUDE.md that makes Claude follow the protocol: [examples/](examples/).
 
 ## How status is decided

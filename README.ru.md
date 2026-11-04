@@ -45,6 +45,8 @@ claude plugin marketplace add devladpopov/director-kit
 claude plugin install director-kit@director-kit
 ```
 
+Видео-гайд из шести шагов, от установки до ежедневного аудита, в кадре только реальный вывод: [docs/GUIDE.md](docs/GUIDE.md) (на английском).
+
 Пошагово для Windows, macOS, Linux и WSL, ежедневный аудит по расписанию, удаление и частые проблемы: [docs/INSTALL.md](docs/INSTALL.md) (на английском). Готовые CHECKPOINT для каждой колонки, пример конфига и CLAUDE.md, с которым Claude соблюдает протокол даже без плагина: [examples/](examples/).
 
 ## Как определяется статус

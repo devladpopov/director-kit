@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 (unreleased)
+## 0.3.0 (4 Nov 2026)
 
 - `BLOCKER: you: ...` (or `user:`, `owner:`) puts a project in "Waiting on you", as the checkpoint-protocol skill always said.
 - `NOT_BEFORE: <ISO time>` in the future shows the project as paused until then instead of stalled.
@@ -8,7 +8,7 @@
 - `director-kit version` and `--version`; `doctor` prints the version.
 - Audit: the empty backups section now suggests `director-kit backup add`.
 - Unit tests with `node:test` (checkpoint parser, status rules, board, audit, backups, html escaping), run in CI next to the smoke test.
-- Docs: [docs/INSTALL.md](docs/INSTALL.md) per platform, [examples/](examples/), [README.ru.md](README.ru.md).
+- Docs: [docs/GUIDE.md](docs/GUIDE.md), a six-step video guide with GIFs and a full mp4; [docs/INSTALL.md](docs/INSTALL.md) per platform, [examples/](examples/), [README.ru.md](README.ru.md).
 
 ## 0.2.1 (31 Oct 2026)
 

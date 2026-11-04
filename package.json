@@ -1,6 +1,6 @@
 {
   "name": "director-kit",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "One board over all your projects, plus the CHECKPOINT and memory protocol that keeps Claude Code sessions from redoing work.",
   "type": "module",
   "bin": { "director-kit": "bin/director-kit.mjs" },
